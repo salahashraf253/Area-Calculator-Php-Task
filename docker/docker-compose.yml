@@ -1,0 +1,29 @@
+version: "3"
+services:
+  host:
+    container_name: host
+    restart: unless-stopped
+    networks:
+      - php-network
+    image: nginx:alpine
+    tty: true
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ../public:/var/www/public
+    ports:
+      - "80:80"
+      - "443:443"
+
+  app:
+    container_name: app
+    restart: unless-stopped
+    networks:
+      - php-network
+    volumes:
+       - ../:/var/www
+    tty: true
+    working_dir: /var/www
+    image: php:8.1.9-fpm-alpine
+
+networks:
+  php-network:
